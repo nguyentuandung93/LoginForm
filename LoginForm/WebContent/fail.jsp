@@ -7,7 +7,6 @@
 <title>ログイン失敗画面</title>
 </head>
 <body>
-	<!-- <h2>${msg}</h2> -->
-	<h2>ログイン出来ませんでした。</h2>
+	<h2>${requestScope.msg}</h2>
 </body>
 </html>

@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/check-login"})
 public class CheckLogin extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,15 +29,11 @@ public class CheckLogin extends HttpServlet{
 				Statement statement = connection.createStatement();
 				String sql = "SELECT * FROM m_user WHERE username = '" + username + "' AND password = '" + password + "'";
 				ResultSet rs = statement.executeQuery(sql);
-				int i = 0;
 				if (rs.next()) {
-					i++;
-				}
-				if (i < 1) {
+					status = "true";
+				} else {
 					status = "false";
 					msg = "ユーザ名とパスワードが間違いました。";
-				} else {
-					status = "true";
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -51,11 +46,9 @@ public class CheckLogin extends HttpServlet{
 		if (status.equals("true") == true) {
 		    resp.sendRedirect("/LoginForm/success.jsp");
 		} else {
-//			req.setAttribute("msg", msg);
-//	        req.getRequestDispatcher("/fail.jsp").forward(req, resp);
-	        resp.sendRedirect("/LoginForm/fail.jsp");
+			req.setAttribute("msg", msg);
+	        req.getRequestDispatcher("/fail.jsp").forward(req, resp);
 		}
-//		System.out.println(msg);
 	}
 	// コネクションを作成
 	public static Connection getJDBCConnection() {
@@ -72,9 +65,5 @@ public class CheckLogin extends HttpServlet{
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public static void main(String[] args) {
-		
 	}
 }
